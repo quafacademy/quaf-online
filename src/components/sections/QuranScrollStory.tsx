@@ -1,351 +1,475 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { motion, useScroll, useTransform, useSpring, MotionValue } from "framer-motion";
-
-// ─────────────────────────────────────────────────────────────────
-//  Qur'an Scroll Story — Apple-style sticky scroll section
-// ─────────────────────────────────────────────────────────────────
+import { motion, useScroll, useSpring, useTransform, MotionValue } from "framer-motion";
 
 const PAGES = [
   {
-    key: "closed",
+    key: "start",
     arabic: "بِسْمِ اللهِ",
+    label: "Bismillah",
     title: "Begin Your Journey",
-    subtitle: "A single step of sincere intention opens the door to the Book of Allah.",
-    accent: "rgba(29,154,175,0.6)",
-    stage: 0,
+    subtitle: "A sincere intention opens every door. The journey of a thousand recitations begins with one step.",
+    step: 1,
   },
   {
-    key: "open1",
+    key: "recite",
     arabic: "اقْرَأْ",
+    label: "Iqra'",
     title: "Learn to Recite with Accuracy",
     subtitle: "Master the letters, sounds, and rules that bring the Qur'an to life on your tongue.",
-    accent: "rgba(29,154,175,0.85)",
-    stage: 1,
+    step: 2,
   },
   {
     key: "tajweed",
     arabic: "تَجْوِيد",
+    label: "Tajweed",
     title: "Improve Your Tajweed",
     subtitle: "Give every letter its due right — beautify your recitation the way the Prophet ﷺ taught.",
-    accent: "rgba(29,154,175,1)",
-    stage: 2,
+    step: 3,
   },
   {
     key: "fluency",
     arabic: "طَلَاقَة",
+    label: "Talaqah",
     title: "Develop Fluency",
     subtitle: "Flow through the verses with ease, confidence, and a rhythm that touches the heart.",
-    accent: "rgba(29,154,175,0.9)",
-    stage: 3,
+    step: 4,
   },
   {
-    key: "understand",
+    key: "reflect",
     arabic: "تَدَبُّر",
+    label: "Tadabbur",
     title: "Understand & Reflect",
     subtitle: "Let the meanings illuminate your heart. The Qur'an is guidance, light, and mercy.",
-    accent: "rgba(255,255,255,0.9)",
-    stage: 4,
+    step: 5,
   },
 ];
 
-// ── Book illustration: renders CSS-based open/close ──
-function QuranIllustration({ stage }: { stage: number }) {
-  const openAngle = (stage / 4) * 65;
-  const glowIntensity = 0.15 + stage * 0.07;
+// ── Islamic geometric SVG pattern for back of page ──
+const BackPattern = () => (
+  <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" className="opacity-[0.06]">
+    <defs>
+      <pattern id="geo" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+        <polygon points="30,2 58,15 58,45 30,58 2,45 2,15" fill="none" stroke="#0f5f77" strokeWidth="0.8" />
+        <polygon points="30,12 48,21 48,39 30,48 12,39 12,21" fill="none" stroke="#1d9aaf" strokeWidth="0.4" />
+        <circle cx="30" cy="30" r="3" fill="none" stroke="#0f5f77" strokeWidth="0.5" />
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#geo)" />
+  </svg>
+);
 
-  return (
-    <div className="relative w-full h-full flex items-center justify-center select-none">
-      {/* Glow backdrop */}
-      <div
-        className="absolute w-72 h-72 rounded-full blur-[90px] transition-all duration-1000"
-        style={{
-          background: `radial-gradient(ellipse, rgba(29,154,175,${glowIntensity}), transparent 70%)`,
-        }}
-      />
-
-      {/* Book wrapper */}
-      <div className="relative" style={{ width: 260, height: 340, perspective: "600px" }}>
-        {/* Right page */}
-        <div
-          className="absolute right-0 top-0 w-[130px] h-full rounded-r-xl"
-          style={{
-            background: "linear-gradient(135deg, #f8fafc 0%, #e6f3f5 60%, #c8e8ed 100%)",
-            boxShadow: "4px 4px 20px rgba(0,0,0,0.35), inset -2px 0 8px rgba(15,95,119,0.08)",
-          }}
-        >
-          {stage > 0 && (
-            <div className="p-4 pt-6 flex flex-col gap-2.5">
-              {[...Array(7)].map((_, idx) => (
-                <div
-                  key={idx}
-                  className="h-[2px] rounded-full bg-quaf-primary/25"
-                  style={{ width: `${68 - idx * 6}%`, marginLeft: "auto" }}
-                />
-              ))}
-            </div>
-          )}
-          <div className="absolute left-0 top-0 w-3 h-full bg-gradient-to-r from-quaf-primary/15 to-transparent" />
-        </div>
-
-        {/* Left page — rotates open */}
-        <div
-          className="absolute left-0 top-0 w-[130px] h-full"
-          style={{
-            background: "linear-gradient(225deg, #f8fafc 0%, #e6f3f5 60%, #c8e8ed 100%)",
-            boxShadow: "-4px 4px 20px rgba(0,0,0,0.35), inset 2px 0 8px rgba(15,95,119,0.08)",
-            borderRadius: "12px 0 0 12px",
-            transformStyle: "preserve-3d",
-            transformOrigin: "right center",
-            transform: `rotateY(${-openAngle}deg)`,
-            transition: "transform 0.8s cubic-bezier(0.43, 0.13, 0.23, 0.96)",
-          }}
-        >
-          {stage > 0 && (
-            <div className="p-4 pt-6 flex flex-col gap-2.5">
-              {[...Array(7)].map((_, idx) => (
-                <div
-                  key={idx}
-                  className="h-[2px] rounded-full bg-quaf-primary/25"
-                  style={{ width: `${62 - idx * 5}%` }}
-                />
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Book spine */}
-        <div
-          className="absolute top-0 h-full z-10"
-          style={{
-            left: "calc(50% - 3px)",
-            width: 6,
-            borderRadius: 3,
-            background: "linear-gradient(to bottom, #0f5f77, #1d9aaf, #0f5f77)",
-            boxShadow: "0 0 12px rgba(29,154,175,0.6)",
-          }}
-        />
-
-        {/* Final glow at stage 4 */}
-        {stage >= 4 && (
-          <div
-            className="absolute inset-0 z-20 rounded pointer-events-none"
-            style={{
-              background: "radial-gradient(ellipse at center, rgba(29,154,175,0.25) 0%, transparent 70%)",
-            }}
-          />
-        )}
-      </div>
-    </div>
-  );
-}
-
-// ── Individual page layer (handles its own transform values via props) ──
-function StoryPage({
+// ── Individual page — hooks called at component level ✓ ──
+function BookPage({
   page,
   index,
+  total,
   smoothProgress,
+  isMobile,
 }: {
   page: (typeof PAGES)[0];
   index: number;
+  total: number;
   smoothProgress: MotionValue<number>;
+  isMobile: boolean;
 }) {
-  const total = PAGES.length;
   const start = index / total;
   const end = (index + 1) / total;
-  const midIn = start + 0.04;
-  const midOut = end - 0.04;
+  const mid = (start + end) / 2;
 
-  const opacity = useTransform(smoothProgress, [start, midIn, midOut, end], [0, 1, 1, 0]);
-  const y = useTransform(smoothProgress, [start, midIn, midOut, end], [40, 0, 0, -40]);
-  const scale = useTransform(smoothProgress, [start, midIn, midOut, end], [0.95, 1, 1, 0.97]);
-  const glowOpacity = useTransform(smoothProgress, [start, midIn], [0, 1]);
+  // Core 3D rotation: 0° (right side up) → −180° (flipped to left)
+  const rotateY = useTransform(
+    smoothProgress,
+    [start, end],
+    isMobile ? [0, -140] : [0, -180]
+  );
+
+  // Subtle bend at peak of flip
+  const scaleX = useTransform(smoothProgress, [start, mid, end], [1, 0.965, 1]);
+
+  // Shadow darkens at mid-flip (pages cast shadow on themselves)
+  const shadowOpacity = useTransform(smoothProgress, [start, mid, end], [0, 0.55, 0]);
+
+  // Glow brightens on the active transition
+  const glowOpacity = useTransform(smoothProgress, [start, mid, end], [0, 0.35, 0]);
+
+  // Dynamic z-index via state
+  const [zIndex, setZIndex] = useState(total - index);
+  useEffect(() => {
+    return smoothProgress.on("change", (v) => {
+      if (v > start && v < end) {
+        setZIndex(total * 2 + 10); // actively flipping → on top
+      } else if (v >= end) {
+        setZIndex(total + index);  // flipped → left pile
+      } else {
+        setZIndex(total - index);  // waiting → right pile (first page highest)
+      }
+    });
+  }, [smoothProgress, start, end, index, total]);
 
   return (
     <motion.div
-      className="absolute inset-0 flex items-center justify-center z-10"
-      style={{ opacity, pointerEvents: "none" }}
+      style={{
+        position: "absolute",
+        inset: 0,
+        transformStyle: "preserve-3d",
+        transformOrigin: "left center",
+        rotateY,
+        scaleX,
+        zIndex,
+      }}
     >
-      <div className="max-w-6xl mx-auto px-4 sm:px-8 lg:px-8 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+      {/* ── FRONT FACE (right side — readable) ── */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          backfaceVisibility: "hidden",
+          WebkitBackfaceVisibility: "hidden",
+        }}
+      >
+        <div
+          className="relative w-full h-full overflow-hidden"
+          style={{
+            background: "linear-gradient(160deg, #faf8f0 0%, #f5f2e6 100%)",
+            borderRadius: "0 8px 8px 0",
+            boxShadow: "inset -3px 0 10px rgba(0,0,0,0.06)",
+          }}
+        >
+          {/* Paper noise texture */}
+          <div
+            className="absolute inset-0 opacity-[0.025] pointer-events-none mix-blend-multiply"
+            style={{
+              backgroundImage:
+                "url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXWBgYGHh4t5eXlzc3OLi4ubm5uVlZWPj4+NjY19fX2JiYl/f39ra2uRkZGZmZlpaWmXl5dvb29xcXGTk5NnZ2c8TV1mAAAAG3RSTlNAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAvEOwtAAAFVklEQVR4XpWWB67c2BUFb3g557T/hRo9/WUMZHlgr4Bg8Z4qQgQJlHI4A8SzFVrapvmTF9O7dmYRFZ60YiBhJRCgh1FYhiLAmdvX0CzTOpNE77ME0Zty/nWWzchDtiqrmQDeuv3powQ5ta2eN0FY0InkqDD73lT9c9lEzwUNqgFHs9VQce3TVClFCQrSTfOiYkVJQBmpbq2L6iZavPnAPcoU0dSw0SUTqz/GtrGuXfbyyBniKykOWQWGqwwMA7QiYAxi+IlPdqo+hYHnUt5ZPfnsHJyNiDtnpJyayNBkF6cWoYGAMY92ZBsiKYelXgg==\" )",
+            }}
+          />
 
-          {/* Book illustration */}
+          {/* Left edge depth shadow */}
+          <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black/10 to-transparent pointer-events-none" />
+
+          {/* Teal noor glow accent */}
           <motion.div
-            style={{ scale }}
-            className="relative flex items-center justify-center h-[280px] sm:h-[380px] order-2 lg:order-1"
-          >
-            {/* Glow aura behind book */}
-            <motion.div
-              style={{ opacity: glowOpacity }}
-              className="absolute w-[400px] h-[400px] rounded-full blur-[130px] pointer-events-none"
-              // inline background avoids separate style prop conflict
-              dangerouslySetInnerHTML={undefined}
+            className="absolute inset-0 pointer-events-none rounded-r-lg"
+            style={{
+              background: "radial-gradient(ellipse 80% 60% at 60% 40%, rgba(29,154,175,0.18), transparent)",
+              opacity: glowOpacity,
+            }}
+          />
+
+          {/* Flip shadow overlay */}
+          <motion.div
+            className="absolute inset-0 pointer-events-none rounded-r-lg bg-black"
+            style={{ opacity: shadowOpacity }}
+          />
+
+          {/* ── PAGE CONTENT ── */}
+          <div className="relative z-10 flex flex-col items-center justify-center h-full px-6 sm:px-10 py-8 text-center">
+            {/* Step pill */}
+            <div
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-5 border text-xs font-bold tracking-widest uppercase"
+              style={{
+                background: "rgba(15,95,119,0.08)",
+                borderColor: "rgba(15,95,119,0.2)",
+                color: "#0f5f77",
+              }}
             >
-              <div
-                className="absolute inset-0 rounded-full"
-                style={{
-                  background: `radial-gradient(ellipse, ${page.accent}, transparent 70%)`,
-                }}
+              <span
+                className="w-1.5 h-1.5 rounded-full"
+                style={{ background: "#1d9aaf", boxShadow: "0 0 6px rgba(29,154,175,0.8)" }}
               />
-            </motion.div>
-            <QuranIllustration stage={page.stage} />
-          </motion.div>
-
-          {/* Text content */}
-          <motion.div
-            style={{ y }}
-            className="flex flex-col items-center lg:items-start text-center lg:text-left gap-5 order-1 lg:order-2"
-          >
-            {/* Step dots */}
-            <div className="flex items-center gap-2.5">
-              {PAGES.map((_, j) => (
-                <div
-                  key={j}
-                  className="rounded-full transition-all duration-700"
-                  style={{
-                    width: j === index ? 22 : 6,
-                    height: 6,
-                    background: j === index ? "#1d9aaf" : "rgba(255,255,255,0.2)",
-                    boxShadow: j === index ? "0 0 10px rgba(29,154,175,0.8)" : "none",
-                  }}
-                />
-              ))}
+              Step {page.step} of {PAGES.length}
             </div>
 
             {/* Arabic */}
             <div
-              className="font-cursive leading-none"
+              className="font-cursive leading-none mb-4"
               style={{
-                fontSize: "clamp(2.8rem, 7vw, 5rem)",
-                color: "white",
-                textShadow: `0 0 35px ${page.accent}, 0 0 70px rgba(29,154,175,0.3), 0 2px 8px rgba(0,0,0,0.5)`,
+                fontSize: "clamp(3rem, 10vw, 5.5rem)",
+                color: "#0f5f77",
+                textShadow: "0 0 30px rgba(29,154,175,0.4), 0 2px 4px rgba(0,0,0,0.08)",
               }}
             >
               {page.arabic}
             </div>
 
-            {/* Title */}
-            <h2
-              className="text-3xl sm:text-4xl lg:text-[2.75rem] font-serif font-bold text-white leading-tight"
-              style={{ textShadow: "0 2px 8px rgba(0,0,0,0.4)" }}
-            >
-              {page.title}
-            </h2>
+            {/* Arabic label */}
+            <div className="text-sm text-quaf-secondary/70 font-medium italic mb-3">{page.label}</div>
 
             {/* Divider */}
             <div
-              className="w-14 h-px"
+              className="w-12 h-px mb-5"
               style={{
-                background: `linear-gradient(to right, ${page.accent}, transparent)`,
-                boxShadow: `0 0 6px ${page.accent}`,
+                background: "linear-gradient(to right, transparent, #1d9aaf, transparent)",
+                boxShadow: "0 0 6px rgba(29,154,175,0.6)",
               }}
             />
 
+            {/* English title */}
+            <h3
+              className="font-serif font-bold text-quaf-dark mb-4 leading-tight"
+              style={{ fontSize: "clamp(1.25rem, 3.5vw, 2rem)" }}
+            >
+              {page.title}
+            </h3>
+
             {/* Subtitle */}
-            <p className="text-white/60 text-base sm:text-lg leading-relaxed max-w-md font-light">
+            <p
+              className="text-quaf-dark/60 leading-relaxed font-light"
+              style={{ fontSize: "clamp(0.8rem, 2vw, 1rem)", maxWidth: "28ch" }}
+            >
               {page.subtitle}
             </p>
-          </motion.div>
+
+            {/* Corner flourish */}
+            <div className="absolute top-4 left-4 w-8 h-8 border-t border-l border-quaf-primary/15 rounded-tl-lg" />
+            <div className="absolute bottom-4 right-4 w-8 h-8 border-b border-r border-quaf-primary/15 rounded-br-lg" />
+          </div>
         </div>
+      </div>
+
+      {/* ── BACK FACE (visible mid-flip from the other side) ── */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          backfaceVisibility: "hidden",
+          WebkitBackfaceVisibility: "hidden",
+          transform: "rotateY(180deg)",
+          background: "linear-gradient(160deg, #f0ede0, #e8e4d4)",
+          borderRadius: "8px 0 0 8px",
+        }}
+      >
+        <BackPattern />
+        <div className="absolute inset-0 flex items-center justify-center opacity-20">
+          <div className="font-cursive text-6xl text-quaf-primary">القرآن</div>
+        </div>
+        {/* Right edge highlight (left edge when flipped) */}
+        <div className="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-black/08 to-transparent" />
       </div>
     </motion.div>
   );
 }
 
-// ── Page counter display (uses a React state to avoid hook-in-JSX ──
-function PageCounter({ pageIndex }: { pageIndex: MotionValue<number> }) {
-  const [display, setDisplay] = useState(1);
-  useEffect(() => {
-    const unsub = pageIndex.on("change", (v) => {
-      setDisplay(Math.min(Math.floor(v) + 1, PAGES.length));
-    });
-    return unsub;
-  }, [pageIndex]);
-  return (
-    <div className="absolute bottom-10 right-8 text-white/30 text-sm font-mono tabular-nums select-none">
-      {display} / {PAGES.length}
-    </div>
-  );
-}
-
-// ── Progress bar ──
+// ── Progress bar (extracted to avoid hook-in-JSX) ──
 function ProgressBar({ smoothProgress }: { smoothProgress: MotionValue<number> }) {
   const width = useTransform(smoothProgress, [0, 1], ["0%", "100%"]);
   return (
-    <div className="absolute bottom-0 left-0 w-full h-[2px] bg-white/10">
+    <div className="absolute bottom-0 left-0 w-full h-[3px] bg-white/8 z-50">
       <motion.div
-        className="h-full bg-[#1d9aaf]"
-        style={{ width, boxShadow: "0 0 8px rgba(29,154,175,0.9)" }}
+        className="h-full"
+        style={{ width, background: "linear-gradient(to right, #0f5f77, #1d9aaf)", boxShadow: "0 0 8px rgba(29,154,175,0.8)" }}
       />
     </div>
   );
 }
 
-// ── Main export ──
+// ── Page counter ──
+function PageCounter({
+  smoothProgress,
+  total,
+}: {
+  smoothProgress: MotionValue<number>;
+  total: number;
+}) {
+  const [current, setCurrent] = useState(1);
+  useEffect(() => {
+    return smoothProgress.on("change", (v) => {
+      setCurrent(Math.min(Math.floor(v * total) + 1, total));
+    });
+  }, [smoothProgress, total]);
+
+  return (
+    <div className="absolute bottom-8 right-8 z-50 select-none">
+      <span className="text-white/25 text-sm font-mono tabular-nums">
+        {current} / {total}
+      </span>
+    </div>
+  );
+}
+
+// ── Left side of book (already-read pages texture) ──
+function LeftBookSide() {
+  return (
+    <div
+      className="absolute left-0 top-0 w-1/2 h-full rounded-l-xl overflow-hidden"
+      style={{ background: "linear-gradient(160deg, #1a0f0a 0%, #2a1a10 100%)" }}
+    >
+      <BackPattern />
+      <div className="absolute inset-0 flex items-center justify-center opacity-15">
+        <div className="font-cursive text-5xl text-quaf-secondary leading-none">بِسْمِ اللهِ</div>
+      </div>
+      {/* Right edge (spine side) shadow */}
+      <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-black/50 to-transparent" />
+    </div>
+  );
+}
+
+// ── Main exported component ──
 export default function QuranScrollStory() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
   });
 
+  // Spring physics for weighted, physical feel
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 70,
+    stiffness: 60,
     damping: 22,
-    mass: 0.4,
+    mass: 0.8,
   });
 
-  const pageIndex = useTransform(smoothProgress, [0, 1], [0, PAGES.length - 0.001]);
+  // Ambient noor light that pulses on each page turn
+  const ambientGlow = useTransform(smoothProgress, (v) => {
+    const pagePos = (v * PAGES.length) % 1;
+    const midDist = Math.abs(pagePos - 0.5);
+    return 1 - midDist * 1.6; // peaks at 0.5 (mid-flip)
+  });
 
   return (
-    <section className="relative" style={{ background: "#071e28" }}>
-      {/* ── Top wave separator (inverted, light-to-dark) ── */}
-      <div className="relative overflow-hidden" style={{ height: 80 }}>
-        <svg
-          className="absolute bottom-0 w-full fill-[#071e28]"
-          viewBox="0 0 1440 80"
-          preserveAspectRatio="none"
-        >
-          <path d="M0,0 C360,80 720,0 1080,80 C1260,120 1380,40 1440,80 L1440,80 L0,80 Z" />
+    <section
+      className="relative"
+      style={{ background: "linear-gradient(to bottom, #0f5f77, #071e28 15%, #071e28 85%, #0f5f77)" }}
+    >
+      {/* Top wave */}
+      <div className="relative overflow-hidden" style={{ height: 70 }}>
+        <svg className="absolute bottom-0 w-full fill-quaf-light" viewBox="0 0 1440 70" preserveAspectRatio="none">
+          <path d="M0,35 C360,70 720,0 1080,35 C1260,53 1380,18 1440,35 L1440,0 L0,0 Z" />
         </svg>
+      </div>
+
+      {/* Section label */}
+      <div className="text-center py-10 relative z-10">
+        <motion.h2
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="text-3xl sm:text-4xl font-serif font-bold text-white mb-3"
+          style={{ textShadow: "0 0 30px rgba(29,154,175,0.4)" }}
+        >
+          Journey Through the Qur&apos;an
+        </motion.h2>
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2, duration: 0.8 }}
+          className="text-white/50 font-light tracking-wide text-sm sm:text-base"
+        >
+          Scroll slowly to turn each page
+        </motion.p>
       </div>
 
       {/* ── 500vh sticky scroll container ── */}
       <div ref={containerRef} style={{ height: "500vh" }} className="relative">
-        <div
-          className="sticky top-0 h-screen overflow-hidden"
-          style={{ background: "#071e28" }}
-        >
-          {/* Ambient glow background */}
-          <div className="absolute inset-0 z-0">
-            <div className="absolute inset-0 bg-gradient-to-br from-[#0c4a60]/70 via-[#071e28] to-[#071e28]" />
+        <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
+
+          {/* Ambient background glow that pulses during page turns */}
+          <motion.div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(29,154,175,0.12), transparent)",
+              opacity: ambientGlow,
+            }}
+          />
+
+          {/* ── BOOK CONTAINER ── */}
+          <div
+            className="relative"
+            style={{
+              width: "min(760px, 92vw)",
+              height: isMobile ? "min(480px, 72vh)" : "min(500px, 68vh)",
+              perspective: isMobile ? "1000px" : "1600px",
+            }}
+          >
+            {/* Ambient book glow */}
             <div
-              className="absolute inset-0"
+              className="absolute inset-0 rounded-xl pointer-events-none -z-10"
               style={{
-                background: "radial-gradient(ellipse 70% 60% at 50% 30%, rgba(29,154,175,0.1), transparent)",
+                boxShadow: "0 0 80px rgba(29,154,175,0.18), 0 40px 80px rgba(0,0,0,0.5)",
               }}
+            />
+
+            {/* Left side: already-read pages */}
+            <LeftBookSide />
+
+            {/* ── RIGHT HALF: active flipping pages ── */}
+            <div
+              className="absolute top-0 right-0 w-1/2 h-full"
+              style={{ transformStyle: "preserve-3d" }}
+            >
+              {PAGES.map((page, i) => (
+                <BookPage
+                  key={page.key}
+                  page={page}
+                  index={i}
+                  total={PAGES.length}
+                  smoothProgress={smoothProgress}
+                  isMobile={isMobile}
+                />
+              ))}
+            </div>
+
+            {/* ── BOOK SPINE (center) ── */}
+            <div
+              className="absolute top-0 bottom-0 z-50"
+              style={{
+                left: "calc(50% - 5px)",
+                width: 10,
+                background: "linear-gradient(to right, #0a3a4a, #0f5f77 40%, #1d9aaf 50%, #0f5f77 60%, #071e28)",
+                boxShadow: "0 0 20px rgba(29,154,175,0.6), -4px 0 16px rgba(0,0,0,0.4), 4px 0 16px rgba(0,0,0,0.4)",
+              }}
+            />
+
+            {/* Book top/bottom edges */}
+            <div
+              className="absolute top-0 left-0 right-0 h-[6px] z-40 rounded-t-sm"
+              style={{ background: "linear-gradient(to bottom, rgba(255,255,255,0.06), transparent)" }}
+            />
+            <div
+              className="absolute bottom-0 left-0 right-0 h-[6px] z-40 rounded-b-sm"
+              style={{ background: "linear-gradient(to top, rgba(0,0,0,0.2), transparent)" }}
             />
           </div>
 
-          {/* All 5 pages stacked, each fades in/out on scroll */}
-          {PAGES.map((page, i) => (
-            <StoryPage key={page.key} page={page} index={i} smoothProgress={smoothProgress} />
-          ))}
+          {/* Scroll hint — fades out after first interaction */}
+          <motion.div
+            className="absolute bottom-16 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+            style={{
+              opacity: useTransform(smoothProgress, [0, 0.08], [1, 0]),
+            }}
+          >
+            <div className="text-white/30 text-xs tracking-[0.2em] uppercase">Scroll to flip</div>
+            <motion.div
+              animate={{ y: [0, 8, 0] }}
+              transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
+              className="w-4 h-6 border border-white/20 rounded-full flex items-start justify-center p-1"
+            >
+              <div className="w-1 h-1.5 bg-white/40 rounded-full" />
+            </motion.div>
+          </motion.div>
 
-          <PageCounter pageIndex={pageIndex} />
+          <PageCounter smoothProgress={smoothProgress} total={PAGES.length} />
           <ProgressBar smoothProgress={smoothProgress} />
         </div>
       </div>
 
-      {/* ── Bottom wave separator (dark-to-light) ── */}
-      <div className="relative overflow-hidden" style={{ height: 80 }}>
-        <svg
-          className="absolute top-0 w-full fill-quaf-light"
-          viewBox="0 0 1440 80"
-          preserveAspectRatio="none"
-        >
-          <path d="M0,80 C360,0 720,80 1080,0 C1260,-20 1380,40 1440,0 L1440,0 L0,0 Z" />
+      {/* Bottom wave */}
+      <div className="relative overflow-hidden" style={{ height: 70 }}>
+        <svg className="absolute top-0 w-full fill-quaf-light" viewBox="0 0 1440 70" preserveAspectRatio="none">
+          <path d="M0,35 C360,0 720,70 1080,35 C1260,17 1380,52 1440,35 L1440,70 L0,70 Z" />
         </svg>
       </div>
     </section>

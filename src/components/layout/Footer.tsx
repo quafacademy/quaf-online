@@ -29,11 +29,11 @@ export default function Footer() {
           {/* Brand Col */}
           <div className="lg:col-span-1">
             <Link href="/" className="inline-block mb-6">
-              <Image 
-                src="/logos/quafWhite.png" 
-                alt="QUAF Logo" 
-                width={140} 
-                height={50} 
+              <Image
+                src="/logos/quafWhite.png"
+                alt="QUAF Logo"
+                width={140}
+                height={100}
                 className="h-12 w-auto object-contain"
               />
             </Link>

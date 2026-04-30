@@ -88,7 +88,7 @@ export default function Hero() {
             className="flex flex-col space-y-7 text-center lg:text-left z-20"
           >
             {/* Badge */}
-            <motion.div
+            {/* <motion.div
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
@@ -103,7 +103,7 @@ export default function Hero() {
                   Premium Learning Experience
                 </span>
               </div>
-            </motion.div>
+            </motion.div> */}
 
             {/* ── HEADLINE — TEXT VISIBILITY FIXED ── */}
             <motion.div
