@@ -4,6 +4,7 @@ import Hero from "@/components/sections/Hero";
 
 // Lazy load sections below the fold for better performance
 const Welcome = dynamic(() => import("@/components/sections/Welcome"), { ssr: true });
+const QuranScrollStory = dynamic(() => import("@/components/sections/QuranScrollStory"), { ssr: true });
 const Journey = dynamic(() => import("@/components/sections/Journey"), { ssr: true });
 const Features = dynamic(() => import("@/components/sections/Features"), { ssr: true });
 const Courses = dynamic(() => import("@/components/sections/Courses"), { ssr: true });
@@ -21,6 +22,7 @@ export default function Home() {
       <main className="flex-grow">
         <Hero />
         <Welcome />
+        <QuranScrollStory />
         <Journey />
         <Features />
         <Courses />
