@@ -29,11 +29,10 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ease-in-out ${
-        isScrolled
-          ? "bg-white/80 backdrop-blur-md shadow-sm py-3"
-          : "bg-transparent py-5"
-      }`}
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ease-in-out ${isScrolled
+        ? "bg-white/80 backdrop-blur-md shadow-sm py-3"
+        : "bg-transparent py-3"
+        }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
@@ -43,17 +42,16 @@ export default function Navbar() {
               <motion.div
                 initial={false}
                 animate={{ opacity: isScrolled ? 0 : 1, scale: isScrolled ? 0.8 : 1 }}
-                className="absolute inset-0 origin-left"
+                className="origin-left"
                 transition={{ duration: 0.3 }}
               >
                 {!isScrolled && (
                   <Image
-                    src="/logos/quaf.png"
-                    alt="QUAF Logo"
+                    src="/fullLogo2.png"
+                    alt="QUAF"
                     width={120}
-                    height={40}
-                    className="object-contain w-auto h-10"
-                    priority
+                    height={45}
+                    className="h-7 w-auto object-contain"
                   />
                 )}
               </motion.div>
@@ -65,11 +63,11 @@ export default function Navbar() {
               >
                 {isScrolled && (
                   <Image
-                    src="/logos/logo1.png"
-                    alt="QUAF Mini Logo"
-                    width={40}
-                    height={40}
-                    className="object-contain w-10 h-10"
+                    src="/fullLogo.png"
+                    alt="QUAF"
+                    width={120}
+                    height={45}
+                    className="h-7 w-auto object-contain"
                   />
                 )}
               </motion.div>
@@ -82,9 +80,8 @@ export default function Navbar() {
               <Link
                 key={link.name}
                 href={link.href}
-                className={`text-sm font-medium transition-colors hover:text-quaf-secondary ${
-                  isScrolled ? "text-quaf-dark" : "text-quaf-dark/90"
-                }`}
+                className={`text-sm font-medium transition-colors hover:text-quaf-secondary ${isScrolled ? "text-quaf-dark" : "text-quaf-light"
+                  }`}
               >
                 {link.name}
               </Link>

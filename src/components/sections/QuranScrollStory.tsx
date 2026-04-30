@@ -361,7 +361,7 @@ export default function QuranScrollStory() {
         >
           Journey Through the Qur&apos;an
         </motion.h2>
-        <motion.p
+        {/* <motion.p
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -369,7 +369,7 @@ export default function QuranScrollStory() {
           className="text-white/50 font-light tracking-wide text-sm sm:text-base"
         >
           Scroll slowly to turn each page
-        </motion.p>
+        </motion.p> */}
       </div>
 
       {/* ── 500vh sticky scroll container ── */}
