@@ -12,6 +12,27 @@
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-playfair), ui-serif, Georgia, serif;
   --font-cursive: var(--font-cursive), cursive;
+
+  /* Custom Animations */
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-float-slow: float 10s ease-in-out infinite;
+  --animate-pulse-glow: pulse-glow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-wave: wave 10s linear infinite;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 1; filter: brightness(1); }
+    50% { opacity: .7; filter: brightness(1.2); }
+  }
+
+  @keyframes wave {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
 }
 
 /* Base styles for smooth scrolling and general reset */
@@ -21,6 +42,15 @@ html {
 
 body {
   @apply bg-quaf-light text-quaf-dark font-sans antialiased;
+}
+
+/* Custom Gradient Utilities */
+.bg-gradient-premium {
+  @apply bg-gradient-to-br from-[#0f5f77] via-[#157991] to-[#1d9aaf];
+}
+
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-quaf-primary to-quaf-secondary;
 }
 
 /* Hide scrollbar for clean carousel */
