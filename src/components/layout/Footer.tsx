@@ -30,11 +30,11 @@ export default function Footer() {
           <div className="lg:col-span-1">
             <Link href="/" className="inline-block mb-6">
               <Image
-                src="/logos/quafWhite.png"
-                alt="QUAF Logo"
-                width={140}
-                height={100}
-                className="h-12 w-auto object-contain"
+                src="/fullLogo2.png"
+                alt="QUAF"
+                width={180}
+                height={68}
+                className="h-16 w-auto object-contain"
               />
             </Link>
             <p className="text-white/60 text-sm leading-relaxed mb-6">
