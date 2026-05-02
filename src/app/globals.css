@@ -38,10 +38,14 @@
 /* Base styles for smooth scrolling and general reset */
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
 body {
   @apply bg-quaf-light text-quaf-dark font-sans antialiased;
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
 /* Custom Gradient Utilities */
