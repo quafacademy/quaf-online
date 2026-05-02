@@ -8,7 +8,7 @@ export default function CTA() {
   return (
     <section id="join" className="py-24 relative overflow-hidden" style={{ background: "#071e28" }}>
       {/* ── Rich gradient layers ── */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 overflow-hidden w-full">
         <div className="absolute inset-0 bg-gradient-to-br from-[#0c4a60] via-[#071e28] to-[#071e28]" />
         {/* Glowing blobs */}
         <div

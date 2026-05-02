@@ -177,7 +177,7 @@ export default function QuranScrollStory() {
   const ambientGlow = useTransform(smoothProgress, (v) => { const p = (v * PAGES.length) % 1; return 1 - Math.abs(p - 0.5) * 1.6; });
 
   return (
-    <section className="relative" style={{ background: "linear-gradient(to bottom,#0f5f77,#071e28 15%,#071e28 85%,#0f5f77)" }}>
+    <section className="relative overflow-hidden w-full" style={{ background: "linear-gradient(to bottom,#0f5f77,#071e28 15%,#071e28 85%,#0f5f77)" }}>
       {/* Top wave */}
       <div className="relative overflow-hidden" style={{ height: 70 }}>
         <svg className="absolute bottom-0 w-full fill-quaf-light" viewBox="0 0 1440 70" preserveAspectRatio="none">

@@ -33,7 +33,7 @@ export default function Hero() {
       style={{ background: "#071e28" }}
     >
       {/* ── Deep layered gradient background ── */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 overflow-hidden w-full">
         <div className="absolute inset-0 bg-gradient-to-br from-[#0c4a60] via-[#0f5f77] to-[#071e28]" />
         <div
           className="absolute -top-1/4 -left-1/4 w-[70%] h-[70%] rounded-full bg-[#1d9aaf]/20 blur-[180px] mix-blend-screen"
