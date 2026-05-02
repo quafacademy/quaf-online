@@ -139,7 +139,7 @@ export default function QuranScrollStory() {
 
   return (
     <section 
-      className="relative w-full overflow-hidden bg-[#071e28]" 
+      className="relative bg-[#071e28]" 
       style={{ background: "linear-gradient(to bottom, #0f5f77, #071e28 15%, #071e28 85%, #0f5f77)" }}
     >
       {/* ── MOBILE VIEW (Normal Flow) ── */}

@@ -32,7 +32,7 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${playfair.variable} ${dancingScript.variable} scroll-smooth antialiased`}
     >
-      <body className="min-h-screen flex flex-col font-sans bg-slate-50 text-quaf-dark overflow-x-hidden w-full">
+      <body className="min-h-screen flex flex-col font-sans bg-slate-50 text-quaf-dark">
         {children}
       </body>
     </html>

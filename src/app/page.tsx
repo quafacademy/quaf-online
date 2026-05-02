@@ -20,7 +20,7 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <main className="flex-grow overflow-x-hidden w-full">
+      <main className="flex-grow">
         <Hero />
         <Welcome />
         <QuranScrollStory />
