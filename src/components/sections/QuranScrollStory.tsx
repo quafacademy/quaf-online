@@ -96,30 +96,49 @@ function PageCounter({ smoothProgress, total }: { smoothProgress: MotionValue<nu
   return <div className="absolute bottom-8 right-6 z-50 text-white/25 text-sm font-mono tabular-nums select-none">{current} / {total}</div>;
 }
 
-// ── Mobile simplified version ──
-function MobileCard({ page, index }: { page: (typeof PAGES)[0]; index: number }) {
+// ── Mobile simplified sticky version ──
+function MobileStickyCard({ page, index, total, smoothProgress }: {
+  page: (typeof PAGES)[0]; index: number; total: number; smoothProgress: MotionValue<number>;
+}) {
+  const start = index / total;
+  const end = (index + 1) / total;
+  
+  // Crossfade transition
+  const opacity = useTransform(smoothProgress, [start - 0.05, start, end - 0.05, end], [0, 1, 1, 0]);
+  const scale = useTransform(smoothProgress, [start - 0.05, start, end - 0.05, end], [0.95, 1, 1, 1.05]);
+  const y = useTransform(smoothProgress, [start - 0.05, start, end - 0.05, end], [20, 0, 0, -20]);
+
+  // If this is the first item, ensure it's fully visible at 0
+  const initialOpacity = index === 0 ? useTransform(smoothProgress, [0, end - 0.05, end], [1, 1, 0]) : opacity;
+  const initialScale = index === 0 ? useTransform(smoothProgress, [0, end - 0.05, end], [1, 1, 1.05]) : scale;
+  const initialY = index === 0 ? useTransform(smoothProgress, [0, end - 0.05, end], [0, 0, -20]) : y;
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.6, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
-      className="relative overflow-hidden mb-5 last:mb-0"
-      style={{ borderRadius: 16, background: "rgba(255,255,255,0.05)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.1)" }}
+      style={{ position: "absolute", inset: 0, opacity: initialOpacity, scale: initialScale, y: initialY, pointerEvents: "none" }}
+      className="flex flex-col justify-center px-4"
     >
-      <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-[#1d9aaf] to-[#0f5f77]" />
-      <div className="p-6 pl-8">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs bg-[#1d9aaf]/20 text-[#1d9aaf] border border-[#1d9aaf]/30">
-            {page.step}
+      <div className="relative overflow-hidden w-full max-w-sm mx-auto shadow-2xl"
+        style={{ borderRadius: 20, background: "rgba(255,255,255,0.06)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", border: "1px solid rgba(255,255,255,0.12)", pointerEvents: "auto" }}
+      >
+        <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-[#1d9aaf] to-[#0f5f77]" />
+        
+        {/* Glow accent */}
+        <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full blur-[60px] pointer-events-none" style={{ background: "rgba(29,154,175,0.25)" }} />
+
+        <div className="relative z-10 p-6 pl-8">
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm bg-gradient-to-br from-[#0f5f77] to-[#1d9aaf] text-white shadow-[0_0_12px_rgba(29,154,175,0.5)]">
+              {page.step}
+            </div>
+            <div className="text-sm font-medium text-white/80 uppercase tracking-widest">{page.label}</div>
           </div>
-          <div className="text-sm font-medium text-white/80 uppercase tracking-widest">{page.label}</div>
+          <div className="font-cursive text-[2.5rem] leading-none text-white mb-4 text-right" style={{ textShadow: "0 0 20px rgba(29,154,175,0.6)" }}>
+            {page.arabic}
+          </div>
+          <h3 className="font-serif font-bold text-white text-xl mb-3">{page.title}</h3>
+          <p className="text-white/65 text-sm leading-relaxed font-light">{page.subtitle}</p>
         </div>
-        <div className="font-cursive text-4xl text-white mb-3 text-right" style={{ textShadow: "0 0 15px rgba(29,154,175,0.5)" }}>
-          {page.arabic}
-        </div>
-        <h3 className="font-serif font-bold text-white text-lg mb-2">{page.title}</h3>
-        <p className="text-white/60 text-sm leading-relaxed font-light">{page.subtitle}</p>
       </div>
     </motion.div>
   );
@@ -129,10 +148,6 @@ function MobileCard({ page, index }: { page: (typeof PAGES)[0]; index: number })
 export default function QuranScrollStory() {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // We use CSS classes to display mobile vs desktop.
-  // md:hidden for simple mobile stack.
-  // hidden md:block for 500vh sticky scroll.
-  
   const { scrollYProgress } = useScroll({ target: containerRef, offset: ["start start", "end end"] });
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 60, damping: 22, mass: 0.8 });
   const ambientGlow = useTransform(smoothProgress, (v) => { const p = (v * PAGES.length) % 1; return 1 - Math.abs(p - 0.5) * 1.6; });
@@ -142,56 +157,34 @@ export default function QuranScrollStory() {
       className="relative bg-[#071e28]" 
       style={{ background: "linear-gradient(to bottom, #0f5f77, #071e28 15%, #071e28 85%, #0f5f77)" }}
     >
-      {/* ── MOBILE VIEW (Normal Flow) ── */}
-      <div className="md:hidden py-16 px-4 relative z-10">
-        <div className="text-center mb-12">
-          <motion.h2 
-            initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} 
-            className="text-3xl font-serif font-bold text-white mb-2" 
-            style={{ textShadow: "0 0 20px rgba(29,154,175,0.4)" }}
-          >
-            Journey Through the Qur&apos;an
-          </motion.h2>
-          <p className="text-white/50 text-sm font-light">A step-by-step path to mastery</p>
-        </div>
-
-        <div className="max-w-md mx-auto">
-          {PAGES.map((page, i) => (
-            <MobileCard key={page.key} page={page} index={i} />
-          ))}
-        </div>
-      </div>
-
-      {/* ── DESKTOP VIEW (Sticky Scroll) ── */}
-      <div ref={containerRef} className="hidden md:block w-full" style={{ height: "500vh" }}>
-        {/* The sticky container locks to the screen for the entire 500vh */}
+      {/* ── UNIFIED STICKY SCROLL VIEW ── */}
+      <div ref={containerRef} className="w-full" style={{ height: "500vh" }}>
         <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center overflow-hidden">
           
           {/* Ambient Glow */}
           <motion.div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 60% 50% at 50% 50%,rgba(29,154,175,0.12),transparent)", opacity: ambientGlow }} />
 
-          {/* Top wave (fixed inside sticky container) */}
+          {/* Top wave */}
           <div className="absolute top-0 left-0 w-full overflow-hidden" style={{ height: 70 }}>
             <svg className="absolute top-0 w-full fill-quaf-light" viewBox="0 0 1440 70" preserveAspectRatio="none">
               <path d="M0,35 C360,70 720,0 1080,35 C1260,53 1380,18 1440,35 L1440,0 L0,0 Z" />
             </svg>
           </div>
 
-          {/* Header (fixed inside sticky container) */}
-          <div className="absolute top-20 text-center px-4 z-20 w-full">
-            <h2 className="text-4xl lg:text-5xl font-serif font-bold text-white mb-2" style={{ textShadow: "0 0 30px rgba(29,154,175,0.4)" }}>
+          {/* Header */}
+          <div className="absolute top-24 md:top-20 text-center px-4 z-20 w-full">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-white mb-2" style={{ textShadow: "0 0 30px rgba(29,154,175,0.4)" }}>
               Journey Through the Qur&apos;an
             </h2>
-            <p className="text-white/50 font-light tracking-wide text-base">
-              Scroll slowly to turn each page
+            <p className="text-white/50 font-light tracking-wide text-sm md:text-base">
+              Scroll slowly to progress
             </p>
           </div>
 
-          {/* Book container */}
-          <div className="relative z-10 mt-16" style={{ width: "min(840px, 90vw)", height: "min(520px, 65vh)", perspective: "1800px" }}>
+          {/* ── DESKTOP: Book container ── */}
+          <div className="hidden md:block relative z-10 mt-16" style={{ width: "min(840px, 90vw)", height: "min(520px, 65vh)", perspective: "1800px" }}>
             <div className="absolute inset-0 rounded-xl pointer-events-none -z-10" style={{ boxShadow: "0 0 80px rgba(29,154,175,0.18),0 40px 80px rgba(0,0,0,0.5)" }} />
 
-            {/* Left side (already-read) */}
             <div className="absolute left-0 top-0 w-1/2 h-full rounded-l-xl overflow-hidden" style={{ background: "linear-gradient(160deg,#1a0f0a,#2a1a10)" }}>
               <BackPattern />
               <div className="absolute inset-0 flex items-center justify-center opacity-15">
@@ -200,22 +193,27 @@ export default function QuranScrollStory() {
               <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-black/50 to-transparent" />
             </div>
 
-            {/* Right half: flipping pages */}
             <div className="absolute top-0 right-0 w-1/2 h-full" style={{ transformStyle: "preserve-3d" }}>
               {PAGES.map((page, i) => (
                 <BookPage key={page.key} page={page} index={i} total={PAGES.length} smoothProgress={smoothProgress} />
               ))}
             </div>
 
-            {/* Spine */}
             <div className="absolute top-0 bottom-0 z-50" style={{ left: "calc(50% - 5px)", width: 10, background: "linear-gradient(to right,#0a3a4a,#0f5f77 40%,#1d9aaf 50%,#0f5f77 60%,#071e28)", boxShadow: "0 0 20px rgba(29,154,175,0.6),-4px 0 16px rgba(0,0,0,0.4),4px 0 16px rgba(0,0,0,0.4)" }} />
             <div className="absolute top-0 left-0 right-0 h-1.5 z-40 rounded-t-sm" style={{ background: "linear-gradient(to bottom,rgba(255,255,255,0.06),transparent)" }} />
             <div className="absolute bottom-0 left-0 right-0 h-1.5 z-40 rounded-b-sm" style={{ background: "linear-gradient(to top,rgba(0,0,0,0.2),transparent)" }} />
           </div>
 
+          {/* ── MOBILE: Crossfade Cards container ── */}
+          <div className="md:hidden relative z-10 w-full mt-12" style={{ height: "420px" }}>
+            {PAGES.map((page, i) => (
+              <MobileStickyCard key={page.key} page={page} index={i} total={PAGES.length} smoothProgress={smoothProgress} />
+            ))}
+          </div>
+
           {/* Scroll hint */}
-          <motion.div className="absolute bottom-[90px] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2" style={{ opacity: useTransform(smoothProgress, [0, 0.08], [1, 0]) }}>
-            <div className="text-white/30 text-xs tracking-[0.2em] uppercase">Scroll to flip</div>
+          <motion.div className="absolute bottom-20 md:bottom-[90px] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2" style={{ opacity: useTransform(smoothProgress, [0, 0.08], [1, 0]) }}>
+            <div className="text-white/30 text-xs tracking-[0.2em] uppercase">Scroll</div>
             <motion.div animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }} className="w-4 h-6 border border-white/20 rounded-full flex items-start justify-center p-1">
               <div className="w-1 h-1.5 bg-white/40 rounded-full" />
             </motion.div>
@@ -224,7 +222,7 @@ export default function QuranScrollStory() {
           <PageCounter smoothProgress={smoothProgress} total={PAGES.length} />
           <ProgressBar smoothProgress={smoothProgress} />
 
-          {/* Bottom wave (fixed inside sticky container) */}
+          {/* Bottom wave */}
           <div className="absolute bottom-0 left-0 w-full overflow-hidden" style={{ height: 70 }}>
             <svg className="absolute bottom-0 w-full fill-quaf-light" viewBox="0 0 1440 70" preserveAspectRatio="none">
               <path d="M0,35 C360,0 720,70 1080,35 C1260,17 1380,52 1440,35 L1440,70 L0,70 Z" />
