@@ -38,13 +38,13 @@
 /* Base styles for smooth scrolling and general reset */
 html {
   scroll-behavior: smooth;
-  overflow-x: hidden;
+  overflow-x: clip;
   max-width: 100vw;
 }
 
 body {
   @apply bg-quaf-light text-quaf-dark font-sans antialiased;
-  overflow-x: hidden;
+  overflow-x: clip;
   max-width: 100vw;
 }
 
