@@ -10,7 +10,7 @@ export default function QTalk() {
       title: "The Heart of Recitation",
       speaker: "Shaykh Abdullah",
       duration: "45 mins",
-      thumbnail: "/logos/logoBlack.png", // Using a placeholder since we only have logos
+      thumbnail: "/logos/logoBlack.png",
     },
     {
       title: "Finding Peace in Surah Rahman",
