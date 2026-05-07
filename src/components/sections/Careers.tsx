@@ -12,8 +12,8 @@ export default function Careers() {
     offset: ["start end", "end start"]
   });
 
-  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
-  const glowOpacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.3, 0.8, 0.3]);
+  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "10%"]);
+  const glowOpacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.2, 0.5, 0.2]);
 
   const benefits = [
     { icon: <BookOpen />, title: "Continuous Learning", desc: "Access to all QUAF advanced courses and exclusive scholar sessions." },
@@ -43,12 +43,12 @@ export default function Careers() {
   ];
 
   return (
-    <section ref={containerRef} className="relative py-24 md:py-32 bg-[#0a151a] overflow-hidden">
+    <section id="careers" ref={containerRef} className="relative py-24 md:py-32 bg-[#071e28] overflow-hidden">
       {/* Background Decor */}
       <motion.div 
         className="absolute inset-0 pointer-events-none"
         style={{ 
-          background: "radial-gradient(circle at 50% 0%, rgba(29, 154, 175, 0.15), transparent 70%)",
+          background: "radial-gradient(circle at 50% 0%, rgba(29, 154, 175, 0.1), transparent 60%)",
           y: bgY,
           opacity: glowOpacity 
         }}
@@ -69,15 +69,14 @@ export default function Careers() {
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.6 }}
             >
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 mb-6">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1d9aaf]/10 border border-[#1d9aaf]/20 mb-6">
                 <Briefcase className="w-4 h-4 text-quaf-secondary" />
-                <span className="text-xs font-bold tracking-widest text-white/80 uppercase">Careers at QUAF</span>
+                <span className="text-xs font-bold tracking-widest text-quaf-secondary uppercase">Careers</span>
               </div>
               <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-white mb-6 leading-tight">
-                More Than a Job.<br/>
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-quaf-secondary to-white">A Calling.</span>
+                Join Our Team
               </h2>
-              <p className="text-white/60 text-lg md:text-xl leading-relaxed mb-12 max-w-lg font-light">
+              <p className="text-white/70 text-lg md:text-xl leading-relaxed mb-12 max-w-lg font-light">
                 We are building the future of Qur&apos;anic education. Join a team of passionate educators, creators, and visionaries dedicated to making the Book of Allah accessible to all.
               </p>
             </motion.div>
@@ -110,20 +109,16 @@ export default function Careers() {
           <div className="relative">
             {/* Glass container for roles */}
             <motion.div
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8 }}
-              className="relative rounded-3xl overflow-hidden p-1"
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="relative bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl p-6 sm:p-8 shadow-xl"
             >
-              {/* Animated border gradient */}
-              <div className="absolute inset-0 bg-gradient-to-br from-quaf-secondary/30 via-transparent to-quaf-primary/30 rounded-3xl" />
-              
-              <div className="relative bg-[#0d1a20]/80 backdrop-blur-xl border border-white/10 rounded-[23px] p-6 sm:p-8">
-                <div className="flex items-center justify-between mb-8 border-b border-white/10 pb-6">
-                  <h3 className="text-xl font-serif font-bold text-white">Open Positions</h3>
-                  <span className="text-quaf-secondary text-sm font-medium bg-quaf-secondary/10 px-3 py-1 rounded-full">{roles.length} Roles</span>
-                </div>
+              <div className="flex items-center justify-between mb-8 border-b border-white/10 pb-6">
+                <h3 className="text-2xl font-serif font-bold text-white">Open Positions</h3>
+                <span className="text-quaf-secondary text-sm font-medium bg-[#1d9aaf]/10 px-3 py-1 rounded-full">{roles.length} Roles</span>
+              </div>
 
                 <div className="space-y-4">
                   {roles.map((role, i) => (
@@ -157,12 +152,11 @@ export default function Careers() {
                 </div>
 
                 <div className="mt-8 text-center pt-6 border-t border-white/10">
-                  <p className="text-white/40 text-sm mb-4">Don&apos;t see a perfect fit?</p>
+                  <p className="text-white/50 text-sm mb-4">Don&apos;t see a perfect fit?</p>
                   <button className="text-quaf-secondary text-sm font-bold hover:text-white transition-colors uppercase tracking-wider">
                     Send Open Application
                   </button>
                 </div>
-              </div>
             </motion.div>
           </div>
         </div>

@@ -24,6 +24,7 @@ export default function Navbar() {
     { name: "Courses", href: "#courses" },
     { name: "Q Talk", href: "#qtalk" },
     { name: "Mentors", href: "#mentors" },
+    { name: "Careers", href: "#careers" },
     { name: "Contact", href: "#contact" },
   ];
 

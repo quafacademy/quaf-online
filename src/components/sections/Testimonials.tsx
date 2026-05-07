@@ -65,13 +65,13 @@ function StarRating({ count }: { count: number }) {
   );
 }
 
-function TestimonialCard({ t, index }: { t: (typeof TESTIMONIALS)[0]; index: number }) {
+function TestimonialCard({ t, index, animate = true }: { t: (typeof TESTIMONIALS)[0]; index: number; animate?: boolean }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.65, delay: (index % 3) * 0.12, ease: [0.16, 1, 0.3, 1] }}
+      initial={animate ? { opacity: 0, y: 30 } : false}
+      whileInView={animate ? { opacity: 1, y: 0 } : undefined}
+      viewport={animate ? { once: true, margin: "-40px" } : undefined}
+      transition={animate ? { duration: 0.65, delay: (index % 3) * 0.12, ease: [0.16, 1, 0.3, 1] as any } : undefined}
       whileHover={{ y: -8, scale: 1.02 }}
       className="group relative flex flex-col h-full rounded-3xl overflow-hidden transition-all duration-500 cursor-default"
       style={{
@@ -184,7 +184,13 @@ export default function Testimonials() {
         </div>
 
         {/* ── Mobile: horizontal swipe carousel ── */}
-        <div className="sm:hidden -mx-4 px-4">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="sm:hidden -mx-4 px-4"
+        >
           <div
             ref={scrollRef}
             className="flex gap-5 overflow-x-auto pb-8 pt-4 no-scrollbar snap-x snap-mandatory"
@@ -192,7 +198,7 @@ export default function Testimonials() {
           >
             {TESTIMONIALS.map((t, i) => (
               <div key={t.name} className="snap-center flex-shrink-0" style={{ width: "calc(85vw)" }}>
-                <TestimonialCard t={t} index={i} />
+                <TestimonialCard t={t} index={i} animate={false} />
               </div>
             ))}
           </div>
@@ -202,7 +208,7 @@ export default function Testimonials() {
               <div key={i} className="w-2 h-2 rounded-full bg-white/10" />
             ))}
           </div>
-        </div>
+        </motion.div>
 
         {/* Bottom trust bar */}
         <motion.div

@@ -49,7 +49,7 @@ function BookPage({ page, index, total, smoothProgress }: {
   return (
     <motion.div style={{ position: "absolute", inset: 0, transformStyle: "preserve-3d", transformOrigin: "left center", rotateY, scaleX, zIndex, willChange: "transform" }}>
       {/* Front face */}
-      <div style={{ position: "absolute", inset: 0, backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}>
+      <div style={{ position: "absolute", inset: 0, backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden", transform: "translateZ(1px)" }}>
         <div className="relative w-full h-full overflow-hidden" style={{ background: "linear-gradient(160deg,#faf8f0,#f5f2e6)", borderRadius: "0 8px 8px 0", boxShadow: "inset -3px 0 10px rgba(0,0,0,0.06)" }}>
           <div className="absolute left-0 top-0 bottom-0 w-4 md:w-8 bg-gradient-to-r from-black/10 to-transparent pointer-events-none" />
           <motion.div className="absolute inset-0 pointer-events-none rounded-r-lg" style={{ background: "radial-gradient(ellipse 80% 60% at 60% 40%,rgba(29,154,175,0.18),transparent)", opacity: glowOpacity }} />
@@ -70,7 +70,7 @@ function BookPage({ page, index, total, smoothProgress }: {
         </div>
       </div>
       {/* Back face */}
-      <div style={{ position: "absolute", inset: 0, backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden", transform: "rotateY(180deg)", background: "linear-gradient(160deg,#f0ede0,#e8e4d4)", borderRadius: "8px 0 0 8px" }}>
+      <div style={{ position: "absolute", inset: 0, backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden", transform: "rotateY(180deg) translateZ(1px)", background: "linear-gradient(160deg,#f0ede0,#e8e4d4)", borderRadius: "8px 0 0 8px" }}>
         <BackPattern />
         <div className="absolute inset-0 flex items-center justify-center opacity-15">
           <div className="font-cursive text-3xl md:text-5xl text-quaf-primary">القرآن</div>

@@ -93,17 +93,17 @@ export default function Programs() {
         </div>
 
         {/* Carousel */}
-        <div 
+        <motion.div 
           ref={scrollRef}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
           className="flex overflow-x-auto gap-6 pb-8 pt-4 -mx-4 px-4 sm:mx-0 sm:px-0 snap-x snap-mandatory no-scrollbar"
         >
           {programs.map((prog, index) => (
-            <motion.div
+            <div
               key={index}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
               className="w-[85vw] sm:w-[300px] md:w-[380px] snap-center shrink-0 bg-white rounded-2xl md:rounded-3xl p-6 md:p-8 border border-quaf-dark/5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(15,95,119,0.08)] transition-all relative overflow-hidden group"
             >
               {/* Color accent top bar */}
@@ -130,9 +130,9 @@ export default function Programs() {
                   Duration: {prog.duration}
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
