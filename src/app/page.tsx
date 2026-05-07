@@ -12,6 +12,7 @@ const Programs = dynamic(() => import("@/components/sections/Programs"), { ssr: 
 const QTalk = dynamic(() => import("@/components/sections/QTalk"), { ssr: true });
 const Mentors = dynamic(() => import("@/components/sections/Mentors"), { ssr: true });
 const Testimonials = dynamic(() => import("@/components/sections/Testimonials"), { ssr: true });
+const Careers = dynamic(() => import("@/components/sections/Careers"), { ssr: true });
 const CTA = dynamic(() => import("@/components/sections/CTA"), { ssr: true });
 const Contact = dynamic(() => import("@/components/sections/Contact"), { ssr: true });
 const Footer = dynamic(() => import("@/components/layout/Footer"), { ssr: true });
@@ -31,6 +32,7 @@ export default function Home() {
         <QTalk />
         <Mentors />
         <Testimonials />
+        <Careers />
         <CTA />
         <Contact />
       </main>

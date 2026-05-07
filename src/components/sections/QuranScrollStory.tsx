@@ -24,7 +24,7 @@ const BackPattern = () => (
   </svg>
 );
 
-// ── Book Page (desktop 3D flip) ──
+// ── Book Page (3D flip for all screens) ──
 function BookPage({ page, index, total, smoothProgress }: {
   page: (typeof PAGES)[0]; index: number; total: number; smoothProgress: MotionValue<number>;
 }) {
@@ -51,21 +51,21 @@ function BookPage({ page, index, total, smoothProgress }: {
       {/* Front face */}
       <div style={{ position: "absolute", inset: 0, backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}>
         <div className="relative w-full h-full overflow-hidden" style={{ background: "linear-gradient(160deg,#faf8f0,#f5f2e6)", borderRadius: "0 8px 8px 0", boxShadow: "inset -3px 0 10px rgba(0,0,0,0.06)" }}>
-          <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black/10 to-transparent pointer-events-none" />
+          <div className="absolute left-0 top-0 bottom-0 w-4 md:w-8 bg-gradient-to-r from-black/10 to-transparent pointer-events-none" />
           <motion.div className="absolute inset-0 pointer-events-none rounded-r-lg" style={{ background: "radial-gradient(ellipse 80% 60% at 60% 40%,rgba(29,154,175,0.18),transparent)", opacity: glowOpacity }} />
           <motion.div className="absolute inset-0 pointer-events-none rounded-r-lg bg-black" style={{ opacity: shadowOpacity }} />
-          <div className="relative z-10 flex flex-col items-center justify-center h-full px-6 sm:px-10 py-8 text-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-4 border text-xs font-bold tracking-widest uppercase" style={{ background: "rgba(15,95,119,0.08)", borderColor: "rgba(15,95,119,0.2)", color: "#0f5f77" }}>
-              <span className="w-1.5 h-1.5 rounded-full" style={{ background: "#1d9aaf", boxShadow: "0 0 6px rgba(29,154,175,0.8)" }} />
+          <div className="relative z-10 flex flex-col items-center justify-center h-full px-2 sm:px-10 py-4 sm:py-8 text-center">
+            <div className="inline-flex items-center gap-1.5 md:gap-2 px-2 md:px-3 py-0.5 md:py-1 rounded-full mb-2 md:mb-4 border text-[9px] md:text-xs font-bold tracking-widest uppercase" style={{ background: "rgba(15,95,119,0.08)", borderColor: "rgba(15,95,119,0.2)", color: "#0f5f77" }}>
+              <span className="w-1 md:w-1.5 h-1 md:h-1.5 rounded-full" style={{ background: "#1d9aaf", boxShadow: "0 0 6px rgba(29,154,175,0.8)" }} />
               Step {page.step} of {PAGES.length}
             </div>
-            <div className="font-cursive leading-none mb-3" style={{ fontSize: "clamp(2.8rem,9vw,5rem)", color: "#0f5f77", textShadow: "0 0 30px rgba(29,154,175,0.4),0 2px 4px rgba(0,0,0,0.08)" }}>{page.arabic}</div>
-            <div className="text-sm text-quaf-secondary/70 font-medium italic mb-3">{page.label}</div>
-            <div className="w-12 h-px mb-4" style={{ background: "linear-gradient(to right,transparent,#1d9aaf,transparent)", boxShadow: "0 0 6px rgba(29,154,175,0.6)" }} />
-            <h3 className="font-serif font-bold text-quaf-dark mb-3 leading-tight" style={{ fontSize: "clamp(1.1rem,3vw,1.8rem)" }}>{page.title}</h3>
-            <p className="text-quaf-dark/60 leading-relaxed font-light" style={{ fontSize: "clamp(0.78rem,1.8vw,0.95rem)", maxWidth: "26ch" }}>{page.subtitle}</p>
-            <div className="absolute top-4 left-4 w-7 h-7 border-t border-l border-quaf-primary/15 rounded-tl-lg" />
-            <div className="absolute bottom-4 right-4 w-7 h-7 border-b border-r border-quaf-primary/15 rounded-br-lg" />
+            <div className="font-cursive leading-none mb-1.5 md:mb-3 text-[2.2rem] md:text-[clamp(2.8rem,9vw,5rem)]" style={{ color: "#0f5f77", textShadow: "0 0 30px rgba(29,154,175,0.4),0 2px 4px rgba(0,0,0,0.08)" }}>{page.arabic}</div>
+            <div className="text-[10px] md:text-sm text-quaf-secondary/70 font-medium italic mb-2 md:mb-3">{page.label}</div>
+            <div className="w-8 md:w-12 h-px mb-2 md:mb-4" style={{ background: "linear-gradient(to right,transparent,#1d9aaf,transparent)", boxShadow: "0 0 6px rgba(29,154,175,0.6)" }} />
+            <h3 className="font-serif font-bold text-quaf-dark mb-1.5 md:mb-3 leading-tight text-[0.85rem] sm:text-[clamp(1.1rem,3vw,1.8rem)] px-2">{page.title}</h3>
+            <p className="text-quaf-dark/60 leading-relaxed font-light text-[0.65rem] md:text-[clamp(0.78rem,1.8vw,0.95rem)] px-1 md:px-0" style={{ maxWidth: "26ch" }}>{page.subtitle}</p>
+            <div className="absolute top-2 left-2 md:top-4 md:left-4 w-4 h-4 md:w-7 md:h-7 border-t border-l border-quaf-primary/15 rounded-tl-lg" />
+            <div className="absolute bottom-2 right-2 md:bottom-4 md:right-4 w-4 h-4 md:w-7 md:h-7 border-b border-r border-quaf-primary/15 rounded-br-lg" />
           </div>
         </div>
       </div>
@@ -73,9 +73,9 @@ function BookPage({ page, index, total, smoothProgress }: {
       <div style={{ position: "absolute", inset: 0, backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden", transform: "rotateY(180deg)", background: "linear-gradient(160deg,#f0ede0,#e8e4d4)", borderRadius: "8px 0 0 8px" }}>
         <BackPattern />
         <div className="absolute inset-0 flex items-center justify-center opacity-15">
-          <div className="font-cursive text-5xl text-quaf-primary">القرآن</div>
+          <div className="font-cursive text-3xl md:text-5xl text-quaf-primary">القرآن</div>
         </div>
-        <div className="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-black/10 to-transparent" />
+        <div className="absolute right-0 top-0 bottom-0 w-4 md:w-6 bg-gradient-to-l from-black/10 to-transparent" />
       </div>
     </motion.div>
   );
@@ -93,55 +93,7 @@ function ProgressBar({ smoothProgress }: { smoothProgress: MotionValue<number> }
 function PageCounter({ smoothProgress, total }: { smoothProgress: MotionValue<number>; total: number }) {
   const [current, setCurrent] = useState(1);
   useEffect(() => smoothProgress.on("change", (v) => setCurrent(Math.min(Math.floor(v * total) + 1, total))), [smoothProgress, total]);
-  return <div className="absolute bottom-8 right-6 z-50 text-white/25 text-sm font-mono tabular-nums select-none">{current} / {total}</div>;
-}
-
-// ── Mobile simplified sticky version ──
-function MobileStickyCard({ page, index, total, smoothProgress }: {
-  page: (typeof PAGES)[0]; index: number; total: number; smoothProgress: MotionValue<number>;
-}) {
-  const start = index / total;
-  const end = (index + 1) / total;
-  
-  // Crossfade transition
-  const opacity = useTransform(smoothProgress, [start - 0.05, start, end - 0.05, end], [0, 1, 1, 0]);
-  const scale = useTransform(smoothProgress, [start - 0.05, start, end - 0.05, end], [0.95, 1, 1, 1.05]);
-  const y = useTransform(smoothProgress, [start - 0.05, start, end - 0.05, end], [20, 0, 0, -20]);
-
-  // If this is the first item, ensure it's fully visible at 0
-  const initialOpacity = index === 0 ? useTransform(smoothProgress, [0, end - 0.05, end], [1, 1, 0]) : opacity;
-  const initialScale = index === 0 ? useTransform(smoothProgress, [0, end - 0.05, end], [1, 1, 1.05]) : scale;
-  const initialY = index === 0 ? useTransform(smoothProgress, [0, end - 0.05, end], [0, 0, -20]) : y;
-
-  return (
-    <motion.div
-      style={{ position: "absolute", inset: 0, opacity: initialOpacity, scale: initialScale, y: initialY, pointerEvents: "none" }}
-      className="flex flex-col justify-center px-4"
-    >
-      <div className="relative overflow-hidden w-full max-w-sm mx-auto shadow-2xl"
-        style={{ borderRadius: 20, background: "rgba(255,255,255,0.06)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", border: "1px solid rgba(255,255,255,0.12)", pointerEvents: "auto" }}
-      >
-        <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-[#1d9aaf] to-[#0f5f77]" />
-        
-        {/* Glow accent */}
-        <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full blur-[60px] pointer-events-none" style={{ background: "rgba(29,154,175,0.25)" }} />
-
-        <div className="relative z-10 p-6 pl-8">
-          <div className="flex items-center gap-3 mb-5">
-            <div className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm bg-gradient-to-br from-[#0f5f77] to-[#1d9aaf] text-white shadow-[0_0_12px_rgba(29,154,175,0.5)]">
-              {page.step}
-            </div>
-            <div className="text-sm font-medium text-white/80 uppercase tracking-widest">{page.label}</div>
-          </div>
-          <div className="font-cursive text-[2.5rem] leading-none text-white mb-4 text-right" style={{ textShadow: "0 0 20px rgba(29,154,175,0.6)" }}>
-            {page.arabic}
-          </div>
-          <h3 className="font-serif font-bold text-white text-xl mb-3">{page.title}</h3>
-          <p className="text-white/65 text-sm leading-relaxed font-light">{page.subtitle}</p>
-        </div>
-      </div>
-    </motion.div>
-  );
+  return <div className="absolute bottom-6 md:bottom-8 right-4 md:right-6 z-50 text-white/25 text-xs md:text-sm font-mono tabular-nums select-none">{current} / {total}</div>;
 }
 
 // ── Main export ──
@@ -176,21 +128,21 @@ export default function QuranScrollStory() {
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-white mb-2" style={{ textShadow: "0 0 30px rgba(29,154,175,0.4)" }}>
               Journey Through the Qur&apos;an
             </h2>
-            <p className="text-white/50 font-light tracking-wide text-sm md:text-base">
+            <p className="text-white/50 font-light tracking-wide text-xs md:text-base">
               Scroll slowly to progress
             </p>
           </div>
 
-          {/* ── DESKTOP: Book container ── */}
-          <div className="hidden md:block relative z-10 mt-16" style={{ width: "min(840px, 90vw)", height: "min(520px, 65vh)", perspective: "1800px" }}>
+          {/* ── Book container (Responsive) ── */}
+          <div className="relative z-10 mt-16 md:mt-16 w-[94vw] h-[360px] md:w-[min(840px,90vw)] md:h-[min(520px,65vh)]" style={{ perspective: "1800px" }}>
             <div className="absolute inset-0 rounded-xl pointer-events-none -z-10" style={{ boxShadow: "0 0 80px rgba(29,154,175,0.18),0 40px 80px rgba(0,0,0,0.5)" }} />
 
             <div className="absolute left-0 top-0 w-1/2 h-full rounded-l-xl overflow-hidden" style={{ background: "linear-gradient(160deg,#1a0f0a,#2a1a10)" }}>
               <BackPattern />
               <div className="absolute inset-0 flex items-center justify-center opacity-15">
-                <div className="font-cursive text-5xl text-quaf-secondary leading-none">بِسْمِ اللهِ</div>
+                <div className="font-cursive text-3xl md:text-5xl text-quaf-secondary leading-none">بِسْمِ اللهِ</div>
               </div>
-              <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-black/50 to-transparent" />
+              <div className="absolute right-0 top-0 bottom-0 w-6 md:w-12 bg-gradient-to-l from-black/50 to-transparent" />
             </div>
 
             <div className="absolute top-0 right-0 w-1/2 h-full" style={{ transformStyle: "preserve-3d" }}>
@@ -199,23 +151,16 @@ export default function QuranScrollStory() {
               ))}
             </div>
 
-            <div className="absolute top-0 bottom-0 z-50" style={{ left: "calc(50% - 5px)", width: 10, background: "linear-gradient(to right,#0a3a4a,#0f5f77 40%,#1d9aaf 50%,#0f5f77 60%,#071e28)", boxShadow: "0 0 20px rgba(29,154,175,0.6),-4px 0 16px rgba(0,0,0,0.4),4px 0 16px rgba(0,0,0,0.4)" }} />
-            <div className="absolute top-0 left-0 right-0 h-1.5 z-40 rounded-t-sm" style={{ background: "linear-gradient(to bottom,rgba(255,255,255,0.06),transparent)" }} />
-            <div className="absolute bottom-0 left-0 right-0 h-1.5 z-40 rounded-b-sm" style={{ background: "linear-gradient(to top,rgba(0,0,0,0.2),transparent)" }} />
-          </div>
-
-          {/* ── MOBILE: Crossfade Cards container ── */}
-          <div className="md:hidden relative z-10 w-full mt-12" style={{ height: "420px" }}>
-            {PAGES.map((page, i) => (
-              <MobileStickyCard key={page.key} page={page} index={i} total={PAGES.length} smoothProgress={smoothProgress} />
-            ))}
+            <div className="absolute top-0 bottom-0 z-50 w-1.5 md:w-2.5" style={{ left: "calc(50% - 3px)", background: "linear-gradient(to right,#0a3a4a,#0f5f77 40%,#1d9aaf 50%,#0f5f77 60%,#071e28)", boxShadow: "0 0 20px rgba(29,154,175,0.6),-4px 0 16px rgba(0,0,0,0.4),4px 0 16px rgba(0,0,0,0.4)" }} />
+            <div className="absolute top-0 left-0 right-0 h-1 md:h-1.5 z-40 rounded-t-sm" style={{ background: "linear-gradient(to bottom,rgba(255,255,255,0.06),transparent)" }} />
+            <div className="absolute bottom-0 left-0 right-0 h-1 md:h-1.5 z-40 rounded-b-sm" style={{ background: "linear-gradient(to top,rgba(0,0,0,0.2),transparent)" }} />
           </div>
 
           {/* Scroll hint */}
-          <motion.div className="absolute bottom-20 md:bottom-[90px] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2" style={{ opacity: useTransform(smoothProgress, [0, 0.08], [1, 0]) }}>
-            <div className="text-white/30 text-xs tracking-[0.2em] uppercase">Scroll</div>
-            <motion.div animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }} className="w-4 h-6 border border-white/20 rounded-full flex items-start justify-center p-1">
-              <div className="w-1 h-1.5 bg-white/40 rounded-full" />
+          <motion.div className="absolute bottom-16 md:bottom-[90px] left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 md:gap-2" style={{ opacity: useTransform(smoothProgress, [0, 0.08], [1, 0]) }}>
+            <div className="text-white/30 text-[10px] md:text-xs tracking-[0.2em] uppercase">Scroll</div>
+            <motion.div animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }} className="w-3 md:w-4 h-5 md:h-6 border border-white/20 rounded-full flex items-start justify-center p-1">
+              <div className="w-1 h-1 md:h-1.5 bg-white/40 rounded-full" />
             </motion.div>
           </motion.div>
 
