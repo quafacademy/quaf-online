@@ -53,15 +53,15 @@ export default function Welcome() {
               Welcome to QUAF
             </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-quaf-dark leading-tight drop-shadow-sm">
-              A Journey Beyond <br className="hidden lg:block" /> Mere Reading
+              The Foundation of Qur’anic Fluency
             </h2>
             <p className="text-base sm:text-lg text-quaf-dark/80 leading-relaxed font-medium">
-              At Quran Understanding Accent Foundation (QUAF), we believe that engaging with the Qur’an is more than just reading words on a page. It is a transformative experience that requires dedication, right guidance, and pure intention.
+              {`QUAF is a guided learning platform dedicated to helping students improve their Qur'anic recitation, pronunciation (Tajweed), and understanding. Through structured programs and reflection-based learning, we nurture both skill and spirituality.`}
             </p>
             <div className="p-6 bg-gradient-to-r from-white to-quaf-soft-teal/50 border-l-4 border-quaf-primary rounded-r-2xl text-quaf-dark/90 text-base sm:text-lg shadow-sm font-serif italic">
-              "Improving Qur’an fluency is a journey of 
-              <span className="font-bold text-quaf-primary mx-1">القلب (heart)</span>, 
-              <span className="font-bold text-quaf-primary mx-1">الصوت (voice)</span>, and 
+              "Improving Qur’an fluency is a journey of
+              <span className="font-bold text-quaf-primary mx-1">القلب (heart)</span>,
+              <span className="font-bold text-quaf-primary mx-1">الصوت (voice)</span>, and
               <span className="font-bold text-quaf-primary mx-1">الفهم (understanding)</span>."
             </div>
           </motion.div>
